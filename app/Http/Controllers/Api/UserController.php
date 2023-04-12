@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
@@ -53,9 +52,46 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
-        //
+        $user = User::findorFail($id);
+        
+        $validated = $request->validated();
+ 
+        $user->name = $validated['name'];
+ 
+        $user->save();
+
+        return $user;
+    }
+ /**
+     * Update the email of the specified resource in storage.
+     */
+    public function email(UserRequest $request, string $id)
+    {
+        $user = User::findorFail($id);
+        
+        $validated = $request->validated();
+ 
+        $user->email = $validated['email'];
+ 
+        $user->save();
+
+        return $user;
+    }
+ /**
+     * Update the passsword of the specified resource in storage.
+     */
+    public function password(UserRequest $request, string $id)
+    {
+        $user = User::findorFail($id);
+        
+        $validated = $request->validated();
+ 
+        $user->password = Hash::make($validated['password']);
+        $user->save();
+
+        return $user;
     }
 
     /**
